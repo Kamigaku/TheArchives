@@ -1,9 +1,9 @@
-import discord
 from discordClient import puppet
+from discordClient.config import settings
 
 
 def mainProcess():
-    bot = puppet.Puppet("ODIyNzY1NzQzMTkxODgzNzc2.YFXCTw.EUaNzgH1sU3YPOXFX9ycmMnFeOE")
+    bot = puppet.Puppet(settings.configurationFile["KEYS"]["ApiKey"])
     bot.connectToServer()
 
 
