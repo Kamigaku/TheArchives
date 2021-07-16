@@ -1,5 +1,18 @@
 import configparser
 
-configurationFile = configparser.ConfigParser()
-configurationFile.read("config.ini")
+def saveConfig():
+    with open("config.ini", "w") as f:
+        configurationFile.write(f)
+
+def registerCogChannel(cog_name: str, channel_id: str):
+    configurationFile.set("COGS_CONFIGURATION", cog_name, channel_id)
+    saveConfig()
+
+def loadConfig():
+    tempConfiguration = configparser.ConfigParser()
+    tempConfiguration.read("config.ini")
+    return tempConfiguration
+
+
+configurationFile = loadConfig()
 print(configurationFile.sections())
