@@ -6,30 +6,27 @@ import os
 import jsonpickle
 from discordClient.model import event
 from discordClient.config import settings
+from discordClient.cogs import assignableCogs
 
 
-class EventCogs(commands.Cog):
+class EventCogs(assignableCogs.AssignableCogs):
 
     def __init__(self, bot):
-        self.bot = bot
+        super().__init__(bot, "events")
         self.bookedDates = []
         if os.path.exists("calendar.json"):
             calendarFile = open("calendar.json", "r")
             self.bookedDates = jsonpickle.decode(calendarFile.read())
-        if "EVENT_COGS" in settings.configurationFile["COGS_CONFIGURATION"]:
-            self.channel_id = settings.configurationFile["COGS_CONFIGURATION"]["EVENT_COGS"]
-        else:
-            self.channel_id = ""
 
     # Commands => commands.command va appeler des commandes customs
     @commands.command(name="edisplay")
     async def display(self, ctx: Context):
-        if ctx.channel.id == self.channel_id:
-            self.displayCalendar(ctx)
+        if str(ctx.channel.id) == self.channel_id:
+            await self.displayCalendar(ctx)
 
     @commands.command(name="eadd")
     async def add(self, ctx: Context, author: str, date_event: str, description: str):
-        if ctx.channel.id == self.channel_id:
+        if str(ctx.channel.id) == self.channel_id:
             createdEvent = event.Event(author, date_event, description)
             self.bookedDates.append(createdEvent)
             self.saveCalendar()
@@ -38,7 +35,7 @@ class EventCogs(commands.Cog):
 
     @commands.command(name="edelete")
     async def delete(self, ctx: Context, id_event: str):
-        if ctx.channel.id == self.channel_id:
+        if str(ctx.channel.id) == self.channel_id:
             for currentEvent in self.bookedDates:
                 if str(currentEvent.uuid) == id_event:
                     self.bookedDates.remove(currentEvent)
@@ -48,9 +45,7 @@ class EventCogs(commands.Cog):
 
     @commands.command("eassign")
     async def assign(self, ctx, channel_id: str):
-        self.channel_id = channel_id
-        settings.registerCogChannel("EVENT_COGS", channel_id)
-        await ctx.message.delete()
+        self.assign_channel(ctx, channel_id)
 
     # Public methods that helps
     def getWeeksAndDaysInMonth(self, year: int, month: int):
