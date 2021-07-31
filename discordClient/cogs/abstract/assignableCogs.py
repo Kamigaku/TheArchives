@@ -1,12 +1,11 @@
-from discord.ext import commands
 from discordClient.config import settings
+from discordClient.cogs.abstract import baseCogs
 
 
-class AssignableCogs(commands.Cog):
+class AssignableCogs(baseCogs.BaseCogs):
 
     def __init__(self, bot, name):
-        self.bot = bot
-        self.cogs_name = name
+        super().__init__(bot, name)
         if name in settings.configurationFile["COGS_CONFIGURATION"]:
             self.channel_id = settings.configurationFile["COGS_CONFIGURATION"][name]
         else:

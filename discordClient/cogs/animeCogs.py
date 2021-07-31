@@ -1,7 +1,8 @@
 from discord.ext import commands
 from discord.ext.commands import Context
 from discordClient.api.malAPI import MalAPI
-from discordClient.cogs import researchCogs
+from discordClient.model import rating
+from discordClient.cogs.abstract import researchCogs
 
 
 class AnimeCogs(researchCogs.ResearchCogs):
@@ -39,7 +40,11 @@ class AnimeCogs(researchCogs.ResearchCogs):
         await tempMsg.delete()
 
         generatedEmbed = self.api.formatAnime(animeEntity)
-        for rate in self.rates:
+
+        rates = rating.retrieve_ratings(element_id, self.cogs_name)
+
+        for str_rate in rates:
+            rate = rating.Rating(str_rate)
             if rate.element_id == str(element_id):
                 author = await rate.retrieve_member(self.bot)
                 generatedEmbed.add_field(name="%s - %s / 20" % (author.display_name, rate.rating), value=rate.comment)

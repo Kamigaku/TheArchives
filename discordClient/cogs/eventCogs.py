@@ -5,8 +5,7 @@ from datetime import date
 import os
 import jsonpickle
 from discordClient.model import event
-from discordClient.config import settings
-from discordClient.cogs import assignableCogs
+from discordClient.cogs.abstract import assignableCogs
 
 
 class EventCogs(assignableCogs.AssignableCogs):

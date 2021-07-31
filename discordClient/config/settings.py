@@ -1,4 +1,5 @@
 import configparser
+from discordClient.dal import dbContext
 
 def saveConfig():
     with open("config.ini", "w") as f:
@@ -15,4 +16,5 @@ def loadConfig():
 
 
 configurationFile = loadConfig()
+dbContext = dbContext.DbContext()
 print(configurationFile.sections())

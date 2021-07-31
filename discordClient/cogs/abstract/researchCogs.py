@@ -1,21 +1,16 @@
 import os
 import jsonpickle
 from discord.ext import commands
-from discordClient.model import rating
-from discordClient.cogs import assignableCogs
+from discordClient.cogs.abstract import assignableCogs
 
 
 class ResearchCogs(assignableCogs.AssignableCogs):
 
     def __init__(self, bot, name):
         super().__init__(bot, name)
-        self.rates = []
         self.messagesToListen = []
         self.previousResearch = None
         self.currentIndex = 0
-        if os.path.exists(self.cogs_name + ".json"):
-            file = open(self.cogs_name + ".json", "r")
-            self.rates = jsonpickle.decode(file.read())
 
     async def search_element(self, ctx, name: str):
         if str(ctx.channel.id) == self.channel_id:
@@ -33,17 +28,12 @@ class ResearchCogs(assignableCogs.AssignableCogs):
             else:
                 rateX = float(rating_split[0].replace(",", "."))
                 rateY = float(rating_split[1].replace(",", "."))
-                newRate = rating.Rating(ctx.author.id, element_id, (rateX / rateY) * 20, description)
-                self.rates.append(newRate)
-                self.save_ratings()
+                rating.save_in_db(ctx.author.id, element_id, description, (rateX / rateY) * 20, self.cogs_name)
                 await ctx.send("Rating has been added :)", delete_after=10)
 
     async def delete_rating(self, ctx, element_id):
         if str(ctx.channel.id) == self.channel_id:
-            for rate in self.rates:
-                if str(rate.uuid) == element_id:
-                    self.rates.remove(rate)
-            self.save_ratings()
+            rating.remove_in_db(element_id)
             await ctx.message.delete()
             await ctx.send(content="The rate has been successfully removed! 😃", delete_after=60)
 
@@ -53,11 +43,6 @@ class ResearchCogs(assignableCogs.AssignableCogs):
         await msg.add_reaction('\N{leftwards black arrow}')
         await msg.add_reaction('\N{black rightwards arrow}')
         self.messagesToListen.append(msg.id)
-
-    def save_ratings(self):
-        f = open(self.cogs_name + ".json", "w")
-        f.write(jsonpickle.encode(self.rates))
-        f.close()
 
     ################################
     #     OVERRIDABLE METHODS      #
