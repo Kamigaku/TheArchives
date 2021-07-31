@@ -31,7 +31,7 @@ class EconomyCogs(baseCogs.BaseCogs):
         user_model, user_created = Economy.get_or_create(discord_user_id=ctx.author.id)
         await ctx.author.send("You currently have {} biteCoin.".format(user_model.amount))
 
-    @tasks.loop(minutes=10)
+    @tasks.loop(seconds=10)
     async def distribute_salary(self):
         fetched_ids = []
         for guild in self.bot.guilds:

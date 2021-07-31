@@ -21,19 +21,19 @@ from PIL import Image, ImageFont, ImageDraw
 rarities_label = ["E", "D", "C", "B", "A", "S", "SS"]
 
 
-front_card_template = ["ressources\\front_1.png", "ressources\\front_2.png",
-                       "ressources\\front_3.png", "ressources\\front_4.png",
-                       "ressources\\front_5.png", "ressources\\front_6.png",
-                       "ressources\\front_7.png", "ressources\\front_8.png",
-                       "ressources\\front_9.png", "ressources\\front_10.png",
-                       "ressources\\front_11.png", "ressources\\front_12.png"]
+front_card_template = ["ressources" + os.sep + "front_1.png", "ressources" + os.sep + "front_2.png",
+                       "ressources" + os.sep + "front_3.png", "ressources" + os.sep + "front_4.png",
+                       "ressources" + os.sep + "front_5.png", "ressources" + os.sep + "front_6.png",
+                       "ressources" + os.sep + "front_7.png", "ressources" + os.sep + "front_8.png",
+                       "ressources" + os.sep + "front_9.png", "ressources" + os.sep + "front_10.png",
+                       "ressources" + os.sep + "front_11.png", "ressources" + os.sep + "front_12.png"]
 
-back_card_template = ["ressources\\back_1.png", "ressources\\back_2.png",
-                      "ressources\\back_3.png", "ressources\\back_4.png",
-                      "ressources\\back_5.png", "ressources\\back_6.png",
-                      "ressources\\back_7.png", "ressources\\back_8.png",
-                      "ressources\\back_9.png", "ressources\\back_10.png",
-                      "ressources\\back_11.png", "ressources\\back_12.png"]
+back_card_template = ["ressources" + os.sep + "back_1.png", "ressources" + os.sep + "back_2.png",
+                      "ressources" + os.sep + "back_3.png", "ressources" + os.sep + "back_4.png",
+                      "ressources" + os.sep + "back_5.png", "ressources" + os.sep + "back_6.png",
+                      "ressources" + os.sep + "back_7.png", "ressources" + os.sep + "back_8.png",
+                      "ressources" + os.sep + "back_9.png", "ressources" + os.sep + "back_10.png",
+                      "ressources" + os.sep + "back_11.png", "ressources" + os.sep + "back_12.png"]
 
 data_title = dict(size_x=400, size_y=30, x=224, y=361)
 data_picture = dict(size_x=448, size_y=303, x=0, y=0)
@@ -78,31 +78,31 @@ def create_card(seed, name: str, image_url: str, description: str, rarity: int, 
 
     # Fonts
     size_title_font = 35
-    tahoma_fonts = ImageFont.truetype("ressources\\fonts\\tahoma.ttf", size_title_font)
+    tahoma_fonts = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", size_title_font)
 
     # Title
     name_w, name_h = img_draw.textsize(name, font=tahoma_fonts)
     while name_w > img_front.width:
         size_title_font -= 1
-        tahoma_fonts = ImageFont.truetype("ressources\\fonts\\tahoma.ttf", size_title_font)
+        tahoma_fonts = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", size_title_font)
         name_w, name_h = img_draw.textsize(name, font=tahoma_fonts)
     img_draw.text((data_title["x"] - (name_w / 2), data_title["y"] - (name_h / 2)), name, font=tahoma_fonts)
 
     # Affiliation
-    tahoma_fonts_aff = ImageFont.truetype("ressources\\fonts\\tahoma.ttf", 12)
+    tahoma_fonts_aff = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 12)
     affiliation_w, affiliation_h = img_draw.textsize(affiliation, font=tahoma_fonts_aff)
     img_draw.text((data_affiliation["x"] - (affiliation_w / 2), data_affiliation["y"] - (affiliation_h / 2)),
                   affiliation, font=tahoma_fonts_aff)
 
     # Description
-    tahoma_fonts_description = ImageFont.truetype("ressources\\fonts\\tahoma.ttf", 14)
+    tahoma_fonts_description = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 14)
     description = description.split(". ")[0] + "."
     wrapped_text = wrap_text(description, data_description["size_x"], tahoma_fonts_description)
     description = "\n".join(wrapped_text)
     img_draw.multiline_text((data_description["x"], data_description["y"]), description, font=tahoma_fonts_description)
 
     # Rarity
-    tahoma_fonts_rarity = ImageFont.truetype("ressources\\fonts\\tahoma.ttf", 28)
+    tahoma_fonts_rarity = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 28)
     rarity_w, rarity_h = img_draw.textsize(rarities_label[rarity], font=tahoma_fonts_rarity)
     img_draw.text((data_rarity["x"] - (rarity_w / 2), data_rarity["y"] - (rarity_h / 2)), rarities_label[rarity],
                   font=tahoma_fonts_rarity)
