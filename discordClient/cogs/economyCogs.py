@@ -10,8 +10,6 @@ class EconomyCogs(baseCogs.BaseCogs):
     def __init__(self, bot):
         self.bot = bot
         self.cogs_name = "economy"
-        self.away_user = []
-        self.online_user = []
         self.distribute_salary.start()
 
     @commands.command(name="give")
