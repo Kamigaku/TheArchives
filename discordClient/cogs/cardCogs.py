@@ -45,12 +45,12 @@ class CardCogs(assignableCogs.AssignableCogs):
             user_model.save()
             front_pictures, back_pictures = self.generate_characters_picture(booster_uuid, characters_selected)
             global_pictures = card_creator.gather_pictures_in_one(front_pictures, 10, 10, 10, 10)
-            global_pictures.save("global_picture_{}.jpg".format(booster_uuid.hex))
-            with open("global_picture_{}.jpg".format(booster_uuid.hex), "rb") as f:
+            global_pictures.save("global_picture_{}.png".format(booster_uuid.hex))
+            with open("global_picture_{}.png".format(booster_uuid.hex), "rb") as f:
                 picture = File(f)
                 await ctx.channel.send(content="Booster generated for user {}".format(ctx.message.author.mention()),
                                        file=picture)
-            os.remove("global_picture_{}.jpg".format(booster_uuid.hex))
+            os.remove("global_picture_{}.png".format(booster_uuid.hex))
         else:
             await ctx.author.send("You don't have enough biteCoin to buy a booster.")
         await temp_msg.delete()
