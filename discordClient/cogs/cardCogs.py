@@ -28,6 +28,7 @@ class CardCogs(assignableCogs.AssignableCogs):
     async def buy_booster(self, ctx: Context):
         user_model, user_created = Economy.get_or_create(discord_user_id=ctx.author.id)
         if user_model.amount >= 20:
+            temp_msg = await ctx.channel.send("Generating the booster...")
             booster_uuid = uuid.uuid4()
             random.seed(booster_uuid.hex)
             characters_selected = []
@@ -47,10 +48,12 @@ class CardCogs(assignableCogs.AssignableCogs):
             global_pictures.save("global_picture_{}.jpg".format(booster_uuid.hex))
             with open("global_picture_{}.jpg".format(booster_uuid.hex), "rb") as f:
                 picture = File(f)
-                await ctx.channel.send(file=picture)
+                await ctx.channel.send(content="Booster generated for user {}".format(ctx.message.author.mention()),
+                                       file=picture)
             os.remove("global_picture_{}.jpg".format(booster_uuid.hex))
         else:
             await ctx.author.send("You don't have enough biteCoin to buy a booster.")
+        await temp_msg.delete()
 
     def distribute_random_character(self, rarities):
         value = random.random() * 100
