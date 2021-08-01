@@ -79,7 +79,6 @@ class Economy(Model):
 class CharactersOwnership(Model):
     discord_user_id = IntegerField()
     character_id = ForeignKeyField(Character, backref='rowid')
-    amount = IntegerField(default=0)
 
     class Meta:
         database = db

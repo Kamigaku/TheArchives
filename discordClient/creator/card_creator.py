@@ -3,43 +3,46 @@ import random
 import os
 from PIL import Image, ImageFont, ImageDraw, ImageColor
 
-# front_card_template = ["..\\..\\ressources\\front_1.png", "..\\..\\ressources\\front_2.png",
-#                        "..\\..\\ressources\\front_3.png", "..\\..\\ressources\\front_4.png",
-#                        "..\\..\\ressources\\front_5.png", "..\\..\\ressources\\front_6.png",
-#                        "..\\..\\ressources\\front_7.png", "..\\..\\ressources\\front_8.png",
-#                        "..\\..\\ressources\\front_9.png", "..\\..\\ressources\\front_10.png",
-#                        "..\\..\\ressources\\front_11.png", "..\\..\\ressources\\front_12.png"]
-#
-# back_card_template = ["..\\..\\ressources\\back_1.png", "..\\..\\ressources\\back_2.png",
-#                       "..\\..\\ressources\\back_3.png", "..\\..\\ressources\\back_4.png",
-#                       "..\\..\\ressources\\back_5.png", "..\\..\\ressources\\back_6.png",
-#                       "..\\..\\ressources\\back_7.png", "..\\..\\ressources\\back_8.png",
-#                       "..\\..\\ressources\\back_9.png", "..\\..\\ressources\\back_10.png",
-#                       "..\\..\\ressources\\back_11.png", "..\\..\\ressources\\back_12.png"]
+front_card_template = ["..\\..\\ressources\\front_1.png", "..\\..\\ressources\\front_2.png",
+                       "..\\..\\ressources\\front_3.png", "..\\..\\ressources\\front_4.png",
+                       "..\\..\\ressources\\front_5.png", "..\\..\\ressources\\front_6.png",
+                       "..\\..\\ressources\\front_7.png", "..\\..\\ressources\\front_8.png",
+                       "..\\..\\ressources\\front_9.png", "..\\..\\ressources\\front_10.png",
+                       "..\\..\\ressources\\front_11.png", "..\\..\\ressources\\front_12.png"]
+
+back_card_template = ["..\\..\\ressources\\back_1.png", "..\\..\\ressources\\back_2.png",
+                      "..\\..\\ressources\\back_3.png", "..\\..\\ressources\\back_4.png",
+                      "..\\..\\ressources\\back_5.png", "..\\..\\ressources\\back_6.png",
+                      "..\\..\\ressources\\back_7.png", "..\\..\\ressources\\back_8.png",
+                      "..\\..\\ressources\\back_9.png", "..\\..\\ressources\\back_10.png",
+                      "..\\..\\ressources\\back_11.png", "..\\..\\ressources\\back_12.png"]
 
 rarities_label = ["E", "D", "C", "B", "A", "S", "SS"]
+color_labels = [ImageColor.getrgb("#9B9B9B"), ImageColor.getrgb("#FFFFFF"), ImageColor.getrgb("#69e15e"),
+                ImageColor.getrgb("#4ccfff"), ImageColor.getrgb("#f0b71c"), ImageColor.getrgb("#f08033"),
+                ImageColor.getrgb("#8f39ce")]
 
 
-front_card_template = ["ressources" + os.sep + "front_1.png", "ressources" + os.sep + "front_2.png",
-                       "ressources" + os.sep + "front_3.png", "ressources" + os.sep + "front_4.png",
-                       "ressources" + os.sep + "front_5.png", "ressources" + os.sep + "front_6.png",
-                       "ressources" + os.sep + "front_7.png", "ressources" + os.sep + "front_8.png",
-                       "ressources" + os.sep + "front_9.png", "ressources" + os.sep + "front_10.png",
-                       "ressources" + os.sep + "front_11.png", "ressources" + os.sep + "front_12.png"]
-
-back_card_template = ["ressources" + os.sep + "back_1.png", "ressources" + os.sep + "back_2.png",
-                      "ressources" + os.sep + "back_3.png", "ressources" + os.sep + "back_4.png",
-                      "ressources" + os.sep + "back_5.png", "ressources" + os.sep + "back_6.png",
-                      "ressources" + os.sep + "back_7.png", "ressources" + os.sep + "back_8.png",
-                      "ressources" + os.sep + "back_9.png", "ressources" + os.sep + "back_10.png",
-                      "ressources" + os.sep + "back_11.png", "ressources" + os.sep + "back_12.png"]
+# front_card_template = ["ressources" + os.sep + "front_1.png", "ressources" + os.sep + "front_2.png",
+#                        "ressources" + os.sep + "front_3.png", "ressources" + os.sep + "front_4.png",
+#                        "ressources" + os.sep + "front_5.png", "ressources" + os.sep + "front_6.png",
+#                        "ressources" + os.sep + "front_7.png", "ressources" + os.sep + "front_8.png",
+#                        "ressources" + os.sep + "front_9.png", "ressources" + os.sep + "front_10.png",
+#                        "ressources" + os.sep + "front_11.png", "ressources" + os.sep + "front_12.png"]
+#
+# back_card_template = ["ressources" + os.sep + "back_1.png", "ressources" + os.sep + "back_2.png",
+#                       "ressources" + os.sep + "back_3.png", "ressources" + os.sep + "back_4.png",
+#                       "ressources" + os.sep + "back_5.png", "ressources" + os.sep + "back_6.png",
+#                       "ressources" + os.sep + "back_7.png", "ressources" + os.sep + "back_8.png",
+#                       "ressources" + os.sep + "back_9.png", "ressources" + os.sep + "back_10.png",
+#                       "ressources" + os.sep + "back_11.png", "ressources" + os.sep + "back_12.png"]
 
 data_title = dict(size_x=400, size_y=30, x=224, y=361)
 data_picture = dict(size_x=448, size_y=303, x=0, y=0)
 data_description = dict(size_x=390, size_y=140, x=34, y=404)
 data_affiliation = dict(size_x=100, size_y=25, x=224, y=616)
 data_footer = dict(size_x=440, size_y=20, x=30, y=650)
-data_rarity = dict(size_x=30, size_y=30, x=42, y=590)
+data_rarity = dict(size_x=30, size_y=30, x=41, y=590)
 
 
 def wrap_text(text, width, font):
@@ -96,10 +99,6 @@ def create_card(seed, title: str, image_url: str, description: str, rarity: int,
     img_back = Image.open(back_card_template[card_index])
     img_draw = ImageDraw.Draw(img_front)
 
-    # Fonts
-    size_title_font = 35
-    tahoma_fonts = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", size_title_font)
-
     # Title
     title_font = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 35)
     title_font, font_width, font_height = resize_font_size(title_font, data_title["size_x"],
@@ -109,7 +108,7 @@ def create_card(seed, title: str, image_url: str, description: str, rarity: int,
     # Affiliation
     affiliation_font = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 12)
     affiliation_font, font_width, font_height = resize_font_size(affiliation_font, data_affiliation["size_x"],
-                                                                 data_affiliation["size_y"], affiliation, img_draw, 35)
+                                                                 data_affiliation["size_y"], affiliation, img_draw, 12)
     img_draw.text((data_affiliation["x"] - (font_width / 2), data_affiliation["y"] - (font_height / 2)),
                   affiliation, font=affiliation_font)
 
@@ -117,7 +116,7 @@ def create_card(seed, title: str, image_url: str, description: str, rarity: int,
     description_font = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 20)
     description_font, font_width, font_height = resize_font_size(description_font, data_description["size_x"],
                                                                  data_description["size_y"], description, img_draw,
-                                                                 14, True)
+                                                                 20, True)
     wrapped_text = wrap_text(description, data_description["size_x"], description_font)
     wrapped_text = "\n".join(wrapped_text)
     img_draw.multiline_text((data_description["x"], data_description["y"]),
@@ -128,7 +127,7 @@ def create_card(seed, title: str, image_url: str, description: str, rarity: int,
     rarity_font, font_width, font_height = resize_font_size(rarity_font, data_rarity["size_x"],
                                                             data_rarity["size_y"], rarities_label[rarity], img_draw, 24)
     img_draw.text((data_rarity["x"] - (font_width / 2), data_rarity["y"] - (font_height / 2)), rarities_label[rarity],
-                  font=rarity_font)
+                  font=rarity_font, fill=color_labels[rarity], stroke_width=1, stroke_fill=(0, 0, 0, 255))
 
     # Picture
     urllib.request.urlretrieve(image_url, "temp.png")
@@ -182,6 +181,6 @@ if __name__ == "__main__":
                 "monstrous. Therefore, she isolated herself from the world as a means of protecting her family and "
                 "kingdom. Elsa's anxieties would eventually trigger a curse that plunged Arendelle into an eternal "
                 "winter. Through Anna's love, however, Elsa was able to control her powers and live peacefully amongst "
-                "her people with a newfound self-confidence.", 1, "Disney Princess\nMonster")
+                "her people with a newfound self-confidence.", 5, "Disney Princess\nMonster")
     img_front.save("front.png")
     img_back.save("back.png")
