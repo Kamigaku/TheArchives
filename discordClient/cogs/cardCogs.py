@@ -35,9 +35,7 @@ class CardCogs(assignableCogs.AssignableCogs):
                 characters_selected.append(self.distribute_random_character([50, 25, 12.5, 9, 3, 0.5]))
             i = 0
             while i < len(characters_selected):
-                ownership_model, has_created_model = CharactersOwnership.get_or_create(
-                    CharactersOwnership.discord_user_id == ctx.author.id &
-                    CharactersOwnership.character_id == characters_selected[i].get_id())
+                ownership_model, has_created_model = CharactersOwnership.get_or_create(CharactersOwnership.discord_user_id == ctx.author.id & CharactersOwnership.character_id == characters_selected[i].get_id())
                 ownership_model.amount += 1
                 ownership_model.save()
                 i += 1

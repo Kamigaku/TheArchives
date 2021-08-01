@@ -28,6 +28,7 @@ class EconomyCogs(baseCogs.BaseCogs):
 
     @commands.command(name="check")
     async def check_wallet(self, ctx: Context):
+        await ctx.message.delete()
         user_model, user_created = Economy.get_or_create(discord_user_id=ctx.author.id)
         await ctx.author.send("You currently have {} biteCoin.".format(user_model.amount))
 
