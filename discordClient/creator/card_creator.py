@@ -3,19 +3,19 @@ import random
 import os
 from PIL import Image, ImageFont, ImageDraw, ImageColor
 
-front_card_template = ["..\\..\\ressources\\front_1.png", "..\\..\\ressources\\front_2.png",
-                       "..\\..\\ressources\\front_3.png", "..\\..\\ressources\\front_4.png",
-                       "..\\..\\ressources\\front_5.png", "..\\..\\ressources\\front_6.png",
-                       "..\\..\\ressources\\front_7.png", "..\\..\\ressources\\front_8.png",
-                       "..\\..\\ressources\\front_9.png", "..\\..\\ressources\\front_10.png",
-                       "..\\..\\ressources\\front_11.png", "..\\..\\ressources\\front_12.png"]
-
-back_card_template = ["..\\..\\ressources\\back_1.png", "..\\..\\ressources\\back_2.png",
-                      "..\\..\\ressources\\back_3.png", "..\\..\\ressources\\back_4.png",
-                      "..\\..\\ressources\\back_5.png", "..\\..\\ressources\\back_6.png",
-                      "..\\..\\ressources\\back_7.png", "..\\..\\ressources\\back_8.png",
-                      "..\\..\\ressources\\back_9.png", "..\\..\\ressources\\back_10.png",
-                      "..\\..\\ressources\\back_11.png", "..\\..\\ressources\\back_12.png"]
+# front_card_template = ["..\\..\\ressources\\front_1.png", "..\\..\\ressources\\front_2.png",
+#                        "..\\..\\ressources\\front_3.png", "..\\..\\ressources\\front_4.png",
+#                        "..\\..\\ressources\\front_5.png", "..\\..\\ressources\\front_6.png",
+#                        "..\\..\\ressources\\front_7.png", "..\\..\\ressources\\front_8.png",
+#                        "..\\..\\ressources\\front_9.png", "..\\..\\ressources\\front_10.png",
+#                        "..\\..\\ressources\\front_11.png", "..\\..\\ressources\\front_12.png"]
+#
+# back_card_template = ["..\\..\\ressources\\back_1.png", "..\\..\\ressources\\back_2.png",
+#                       "..\\..\\ressources\\back_3.png", "..\\..\\ressources\\back_4.png",
+#                       "..\\..\\ressources\\back_5.png", "..\\..\\ressources\\back_6.png",
+#                       "..\\..\\ressources\\back_7.png", "..\\..\\ressources\\back_8.png",
+#                       "..\\..\\ressources\\back_9.png", "..\\..\\ressources\\back_10.png",
+#                       "..\\..\\ressources\\back_11.png", "..\\..\\ressources\\back_12.png"]
 
 rarities_label = ["E", "D", "C", "B", "A", "S", "SS"]
 color_labels = [ImageColor.getrgb("#9B9B9B"), ImageColor.getrgb("#FFFFFF"), ImageColor.getrgb("#69e15e"),
@@ -23,19 +23,19 @@ color_labels = [ImageColor.getrgb("#9B9B9B"), ImageColor.getrgb("#FFFFFF"), Imag
                 ImageColor.getrgb("#8f39ce")]
 
 
-# front_card_template = ["ressources" + os.sep + "front_1.png", "ressources" + os.sep + "front_2.png",
-#                        "ressources" + os.sep + "front_3.png", "ressources" + os.sep + "front_4.png",
-#                        "ressources" + os.sep + "front_5.png", "ressources" + os.sep + "front_6.png",
-#                        "ressources" + os.sep + "front_7.png", "ressources" + os.sep + "front_8.png",
-#                        "ressources" + os.sep + "front_9.png", "ressources" + os.sep + "front_10.png",
-#                        "ressources" + os.sep + "front_11.png", "ressources" + os.sep + "front_12.png"]
-#
-# back_card_template = ["ressources" + os.sep + "back_1.png", "ressources" + os.sep + "back_2.png",
-#                       "ressources" + os.sep + "back_3.png", "ressources" + os.sep + "back_4.png",
-#                       "ressources" + os.sep + "back_5.png", "ressources" + os.sep + "back_6.png",
-#                       "ressources" + os.sep + "back_7.png", "ressources" + os.sep + "back_8.png",
-#                       "ressources" + os.sep + "back_9.png", "ressources" + os.sep + "back_10.png",
-#                       "ressources" + os.sep + "back_11.png", "ressources" + os.sep + "back_12.png"]
+front_card_template = ["ressources" + os.sep + "front_1.png", "ressources" + os.sep + "front_2.png",
+                       "ressources" + os.sep + "front_3.png", "ressources" + os.sep + "front_4.png",
+                       "ressources" + os.sep + "front_5.png", "ressources" + os.sep + "front_6.png",
+                       "ressources" + os.sep + "front_7.png", "ressources" + os.sep + "front_8.png",
+                       "ressources" + os.sep + "front_9.png", "ressources" + os.sep + "front_10.png",
+                       "ressources" + os.sep + "front_11.png", "ressources" + os.sep + "front_12.png"]
+
+back_card_template = ["ressources" + os.sep + "back_1.png", "ressources" + os.sep + "back_2.png",
+                      "ressources" + os.sep + "back_3.png", "ressources" + os.sep + "back_4.png",
+                      "ressources" + os.sep + "back_5.png", "ressources" + os.sep + "back_6.png",
+                      "ressources" + os.sep + "back_7.png", "ressources" + os.sep + "back_8.png",
+                      "ressources" + os.sep + "back_9.png", "ressources" + os.sep + "back_10.png",
+                      "ressources" + os.sep + "back_11.png", "ressources" + os.sep + "back_12.png"]
 
 data_title = dict(size_x=400, size_y=30, x=224, y=361)
 data_picture = dict(size_x=448, size_y=303, x=0, y=0)
