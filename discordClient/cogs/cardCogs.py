@@ -51,9 +51,9 @@ class CardCogs(assignableCogs.AssignableCogs):
                 await ctx.channel.send(content="Booster generated for user {}".format(ctx.message.author.mention),
                                        file=picture)
             os.remove("global_picture_{}.png".format(booster_uuid.hex))
+            await temp_msg.delete()
         else:
             await ctx.author.send("You don't have enough biteCoin to buy a booster.")
-        await temp_msg.delete()
 
     def distribute_random_character(self, rarities):
         value = random.random() * 100
