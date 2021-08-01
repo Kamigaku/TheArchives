@@ -162,7 +162,7 @@ def gather_pictures_in_one(pictures, offset_x: int, offset_y: int, space_x: int,
         if picture.height > total_height:
             total_height = picture.height
     total_height + space_y
-    global_picture = Image.new("RGB", (total_width + offset_x, total_height + offset_y), 255)
+    global_picture = Image.new("RGBA", (total_width + offset_x, total_height + offset_y), [255, 255, 255])
 
     current_offset_x = int(offset_x / 2)
     current_offset_y = int(offset_y / 2)
