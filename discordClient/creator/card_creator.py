@@ -1,5 +1,4 @@
 import urllib.request
-import uuid
 import random
 import os
 from PIL import Image, ImageFont, ImageDraw
@@ -37,8 +36,8 @@ back_card_template = ["ressources" + os.sep + "back_1.png", "ressources" + os.se
 
 data_title = dict(size_x=400, size_y=30, x=224, y=361)
 data_picture = dict(size_x=448, size_y=303, x=0, y=0)
-data_description = dict(size_x=390, size_y=140, x=30, y=405)
-data_affiliation = dict(size_x=100, size_y=25, x=224, y=617)
+data_description = dict(size_x=390, size_y=140, x=34, y=404)
+data_affiliation = dict(size_x=100, size_y=25, x=224, y=616)
 data_footer = dict(size_x=440, size_y=20, x=30, y=650)
 data_rarity = dict(size_x=30, size_y=30, x=42, y=590)
 
@@ -68,7 +67,28 @@ def wrap_text(text, width, font):
     return text_lines
 
 
-def create_card(seed, name: str, image_url: str, description: str, rarity: int, affiliation=None):
+def resize_font_size(font: ImageFont, max_width: int, max_height, text: str,
+                     img_draw: ImageDraw, default_font_size: int, should_wrap: bool = False):
+    name_w, name_h = img_draw.textsize(text, font=font)
+    initial_text = text
+    while name_w > max_width:
+        default_font_size -= 1
+        font = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", default_font_size)
+        if should_wrap:
+            text = wrap_text(initial_text, max_width, font)
+            text = "\n".join(text)
+        name_w, name_h = img_draw.textsize(text, font=font)
+    while name_h > max_height:
+        default_font_size -= 1
+        font = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", default_font_size)
+        if should_wrap:
+            text = wrap_text(initial_text, max_width, font)
+            text = "\n".join(text)
+        name_w, name_h = img_draw.textsize(text, font=font)
+    return font, name_w, name_h
+
+
+def create_card(seed, title: str, image_url: str, description: str, rarity: int, affiliation=None):
     random.seed(seed)
 
     card_index = random.randrange(0, len(front_card_template))
@@ -81,31 +101,34 @@ def create_card(seed, name: str, image_url: str, description: str, rarity: int, 
     tahoma_fonts = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", size_title_font)
 
     # Title
-    name_w, name_h = img_draw.textsize(name, font=tahoma_fonts)
-    while name_w > img_front.width:
-        size_title_font -= 1
-        tahoma_fonts = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", size_title_font)
-        name_w, name_h = img_draw.textsize(name, font=tahoma_fonts)
-    img_draw.text((data_title["x"] - (name_w / 2), data_title["y"] - (name_h / 2)), name, font=tahoma_fonts)
+    title_font = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 35)
+    title_font, font_width, font_height = resize_font_size(title_font, data_title["size_x"],
+                                                           data_title["size_y"], title, img_draw, 35)
+    img_draw.text((data_title["x"] - (font_width / 2), data_title["y"] - (font_height / 2)), title, font=title_font)
 
     # Affiliation
-    tahoma_fonts_aff = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 12)
-    affiliation_w, affiliation_h = img_draw.textsize(affiliation, font=tahoma_fonts_aff)
-    img_draw.text((data_affiliation["x"] - (affiliation_w / 2), data_affiliation["y"] - (affiliation_h / 2)),
-                  affiliation, font=tahoma_fonts_aff)
+    affiliation_font = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 12)
+    affiliation_font, font_width, font_height = resize_font_size(affiliation_font, data_affiliation["size_x"],
+                                                                 data_affiliation["size_y"], affiliation, img_draw, 35)
+    img_draw.text((data_affiliation["x"] - (font_width / 2), data_affiliation["y"] - (font_height / 2)),
+                  affiliation, font=affiliation_font)
 
     # Description
-    tahoma_fonts_description = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 14)
-    description = description.split(". ")[0] + "."
-    wrapped_text = wrap_text(description, data_description["size_x"], tahoma_fonts_description)
-    description = "\n".join(wrapped_text)
-    img_draw.multiline_text((data_description["x"], data_description["y"]), description, font=tahoma_fonts_description)
+    description_font = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 20)
+    description_font, font_width, font_height = resize_font_size(description_font, data_description["size_x"],
+                                                                 data_description["size_y"], description, img_draw,
+                                                                 14, True)
+    wrapped_text = wrap_text(description, data_description["size_x"], description_font)
+    wrapped_text = "\n".join(wrapped_text)
+    img_draw.multiline_text((data_description["x"], data_description["y"]),
+                            wrapped_text, font=description_font)
 
     # Rarity
-    tahoma_fonts_rarity = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 28)
-    rarity_w, rarity_h = img_draw.textsize(rarities_label[rarity], font=tahoma_fonts_rarity)
-    img_draw.text((data_rarity["x"] - (rarity_w / 2), data_rarity["y"] - (rarity_h / 2)), rarities_label[rarity],
-                  font=tahoma_fonts_rarity)
+    rarity_font = ImageFont.truetype("ressources" + os.sep + "fonts" + os.sep + "tahoma.ttf", 24)
+    rarity_font, font_width, font_height = resize_font_size(rarity_font, data_rarity["size_x"],
+                                                            data_rarity["size_y"], rarities_label[rarity], img_draw, 24)
+    img_draw.text((data_rarity["x"] - (font_width / 2), data_rarity["y"] - (font_height / 2)), rarities_label[rarity],
+                  font=rarity_font)
 
     # Picture
     urllib.request.urlretrieve(image_url, "temp.png")
@@ -114,16 +137,17 @@ def create_card(seed, name: str, image_url: str, description: str, rarity: int, 
     ratio_img = data_picture["size_x"] / data_picture["size_y"]
     ratio_picture = img_character.width / img_character.height
     if ratio_picture < ratio_img:
-        img_character = img_character.resize((data_picture["size_x"], int(data_picture["size_x"] * img_character.height / img_character.width)))
+        img_character = img_character.resize((data_picture["size_x"],
+                                              int(data_picture["size_x"] * img_character.height / img_character.width)))
     else:
-        img_character = img_character.resize((int(data_picture["size_y"] * img_character.width / img_character.height), data_picture["size_y"]))
+        img_character = img_character.resize((int(data_picture["size_y"] * img_character.width / img_character.height),
+                                              data_picture["size_y"]))
 
     img_mask = Image.new("L", img_character.size, 0)
     draw = ImageDraw.Draw(img_mask)
-    draw.rectangle((data_picture["x"],
-                    data_picture["y"],
-                    data_picture["size_x"] + data_picture["x"],
-                    data_picture["size_y"] + data_picture["y"]), fill=255)
+    draw.rectangle((data_picture["x"], data_picture["y"],
+                   data_picture["size_x"] + data_picture["x"], data_picture["size_y"] + data_picture["y"]),
+                   fill=255)
 
     img_front.paste(img_character, (data_picture["x"], data_picture["y"]), img_mask)
     os.remove("temp.png")
@@ -146,13 +170,11 @@ def gather_pictures_in_one(pictures, offset_x: int, offset_y: int, space_x: int,
     for picture in pictures:
         global_picture.paste(picture, (current_offset_x, current_offset_y))
         current_offset_x += picture.width + space_x
-
-    global_picture.save("global.png")
     return global_picture
 
 
 if __name__ == "__main__":
-    create_card(105, "Elsa", "https://static.wikia.nocookie.net/villains/images/9/97/Xenomorphs.jpg/revision/latest/scale-to-width-down/1000?cb=20181223215802",
+    img_front, img_back = create_card(105, "Elsa", "https://static.wikia.nocookie.net/villains/images/9/97/Xenomorphs.jpg/revision/latest/scale-to-width-down/1000?cb=20181223215802",
                 "'Elsa the Snow Queen' is the deuteragonist of Walt Disney Animation Studios's 2013 "
                 "animated feature film Frozen and the protagonist of its 2019 Frozen II. Born with the power of ice "
                 "and snow, Elsa is the firstborn daughter of King Agnarr and Queen Iduna, the older sister of Anna, "
@@ -160,4 +182,6 @@ if __name__ == "__main__":
                 "monstrous. Therefore, she isolated herself from the world as a means of protecting her family and "
                 "kingdom. Elsa's anxieties would eventually trigger a curse that plunged Arendelle into an eternal "
                 "winter. Through Anna's love, however, Elsa was able to control her powers and live peacefully amongst "
-                "her people with a newfound self-confidence.", 1, "Disney Princess")
+                "her people with a newfound self-confidence.", 1, "Disney Princess\nMonster")
+    img_front.save("front.png")
+    img_back.save("back.png")

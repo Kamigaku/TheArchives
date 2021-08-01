@@ -70,7 +70,11 @@ class CardCogs(assignableCogs.AssignableCogs):
         characters_picture_back = []
         for character in characters:
             affiliation = ""
-            for current_affiliation in (Affiliation.select().join(CharacterAffiliation).join(Character).where(CharacterAffiliation.character_id == character.get_id()).group_by(Affiliation)):
+            for current_affiliation in (Affiliation.select()
+                                                   .join(CharacterAffiliation)
+                                                   .join(Character)
+                                                   .where(CharacterAffiliation.character_id == character.get_id())
+                                                   .group_by(Affiliation)):
                 if affiliation:
                     affiliation += "\n"
                 affiliation += current_affiliation.name

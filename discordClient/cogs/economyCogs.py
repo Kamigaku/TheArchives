@@ -1,4 +1,3 @@
-import schedule
 from discord.ext import tasks, commands
 from discord.user import User
 from discord import Status
@@ -39,10 +38,14 @@ class EconomyCogs(baseCogs.BaseCogs):
             for member in guild.members:
                 if member.id not in fetched_ids:
                     fetched_ids.append(member.id)
+                    amount = 0
                     if member.status == Status.online:
-                        await add_amount(member, 2, False)
-                    elif member.status == Status.idle:
-                        await add_amount(member, 1, False)
+                        amount = 2
+                    elif member.status == Status.idle or member.status == Status.do_not_disturb:
+                        amount = 1
+                    if member.voice.channel is not None:
+                        amount *= 2
+                    await add_amount(member, amount, False)
 
 
 def setup(client):
