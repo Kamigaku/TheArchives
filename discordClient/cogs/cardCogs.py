@@ -48,7 +48,7 @@ class CardCogs(assignableCogs.AssignableCogs):
             global_pictures.save("global_picture_{}.png".format(booster_uuid.hex))
             with open("global_picture_{}.png".format(booster_uuid.hex), "rb") as f:
                 picture = File(f)
-                await ctx.channel.send(content="Booster generated for user {}".format(ctx.message.author.mention()),
+                await ctx.channel.send(content="Booster generated for user {}".format(ctx.message.author.mention),
                                        file=picture)
             os.remove("global_picture_{}.png".format(booster_uuid.hex))
         else:
