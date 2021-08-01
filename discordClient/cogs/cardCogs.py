@@ -71,13 +71,9 @@ class CardCogs(assignableCogs.AssignableCogs):
         characters_picture_back = []
         for character in characters:
             affiliation = ""
-            for current_affiliation in (Affiliation.select()
-                                                   .join(CharacterAffiliation)
-                                                   .join(Character)
-                                                   .where(CharacterAffiliation.character_id == character.get_id())
-                                                   .group_by(Affiliation)):
+            for current_affiliation in (Affiliation.select().join(CharacterAffiliation).join(Character).where(CharacterAffiliation.character_id == character.get_id()).group_by(Affiliation)):
                 if affiliation:
-                    affiliation += ", "
+                    affiliation += "\n"
                 affiliation += current_affiliation.name
             front, back = card_creator.create_card(random.random(), character.name, character.image_link,
                                                    character.description.encode().decode("ISO-8859-1", 'replace'),
