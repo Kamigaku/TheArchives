@@ -1,4 +1,7 @@
 from peewee import *
+from playhouse.migrate import *
+from playhouse.sqlite_ext import RowIDField
+
 from discordClient.dal import dbContext
 
 db = dbContext.DbContext().sqliteConnection
@@ -79,7 +82,7 @@ class Economy(Model):
 class CharactersOwnership(Model):
     discord_user_id = IntegerField()
     character_id = ForeignKeyField(Character, backref='rowid')
-    amount = IntegerField(default=0)
+    message_id = IntegerField()
 
     class Meta:
         database = db
@@ -87,3 +90,9 @@ class CharactersOwnership(Model):
 
 db.create_tables([Character, Feature, Affiliation, CharacterAffiliation, CharacterOccurrence, Event, Rating, Economy,
                   CharactersOwnership])
+migrator = SqliteMigrator(dbContext.DbContext().sqliteConnection)
+
+migrate(
+    migrator.drop_column("charactersownership", "amount"),
+    migrator.add_column("charactersownership", "message_id", IntegerField(default=-1))
+)

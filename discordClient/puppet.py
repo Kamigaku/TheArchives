@@ -15,6 +15,7 @@ class Puppet:
         intents = Intents.default()
         intents.members = True
         intents.presences = True
+        intents.reactions = True
         self.bot = commands.Bot(command_prefix='puppet ', intents=intents)
         self.bot.add_cog(SettingsCogs(self.bot))
         #self.bot.add_cog(MovieCogs(self.bot))
