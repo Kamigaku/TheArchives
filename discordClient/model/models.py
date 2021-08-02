@@ -93,6 +93,6 @@ db.create_tables([Character, Feature, Affiliation, CharacterAffiliation, Charact
 migrator = SqliteMigrator(dbContext.DbContext().sqliteConnection)
 
 migrate(
-    migrator.drop_column("charactersownership", "amount"),
-    migrator.add_column("charactersownership", "message_id", IntegerField(default=-1))
+    #migrator.drop_column("charactersownership", "amount"),
+    #migrator.add_column("charactersownership", "message_id", IntegerField(default=-1))
 )
