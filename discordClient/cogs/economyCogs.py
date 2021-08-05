@@ -8,8 +8,7 @@ from discordClient.model.models import *
 class EconomyCogs(baseCogs.BaseCogs):
 
     def __init__(self, bot):
-        self.bot = bot
-        self.cogs_name = "economy"
+        super().__init__(bot, "economy")
         self.distribute_salary.start()
 
     @commands.command(name="give")

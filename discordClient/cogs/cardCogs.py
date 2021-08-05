@@ -4,6 +4,7 @@ from peewee import DoesNotExist
 from discord.ext import commands
 from discord.ext.commands import Context
 from discord import Colour, Embed, RawReactionActionEvent
+from discordClient.helper import constants
 from discordClient.cogs.abstract import assignableCogs
 from discordClient.model.models import Character, CharactersOwnership, Affiliation, CharacterAffiliation, Economy
 
@@ -19,13 +20,16 @@ class CardCogs(assignableCogs.AssignableCogs):
     def __init__(self, bot):
         super().__init__(bot, "card")
 
+    def retrieve_character_id(self, embeds: Embed) -> int:
+        return int(self.retrieve_from_embed(embeds, "Character_id: (\d+)"))
+
+    ################################
+    #       COMMAND COGS           #
+    ################################
+
     @commands.command("cards assign")
     async def assign(self, ctx: Context, channel_id: str):
         await self.assign_channel(ctx, channel_id)
-
-    @commands.command("cards display")
-    async def display_boosters(self, ctx: Context):
-        pass
 
     @commands.command("cards_buy")
     async def buy_booster(self, ctx: Context):
@@ -33,7 +37,8 @@ class CardCogs(assignableCogs.AssignableCogs):
         if user_model.amount >= 20:
             booster_uuid = uuid.uuid4()
             random.seed(booster_uuid.hex)
-            await ctx.channel.send(content=f"Booster generated for user {ctx.message.author.mention}")
+            await ctx.message.reply(content=f"Booster generated for user {ctx.message.author.mention}",
+                                    mention_author=False)
             for _ in range(5):
                 character_generated = distribute_random_character([50, 25, 12.5, 9, 3, 0.5])
                 msg = await display_character(ctx, character_generated)
@@ -51,28 +56,47 @@ class CardCogs(assignableCogs.AssignableCogs):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: RawReactionActionEvent):
-        if payload.member.bot is not True and payload.event_type == "REACTION_ADD":
-            try:
-                owner = CharactersOwnership.get(message_id=payload.message_id)
-                if owner.discord_user_id == payload.user_id:
-                    user_model, user_created = Economy.get_or_create(discord_user_id=payload.member.id)
+        ####
+        # Init actions
+        if self.bot.user.id == payload.user_id:  # We avoid to react to the current bot reactions
+            return
+
+        # We avoid situation that doesn't matter
+        user_that_reacted = await self.retrieve_member(payload.user_id)
+        if user_that_reacted.bot is True or payload.event_type != "REACTION_ADD":
+            return
+
+        # Variables that are needed to determine path
+        origin_message = await self.retrieve_message(payload.channel_id, payload.message_id)
+        replied_message = await self.retrieve_origin_reply_message(origin_message)
+
+        # We exit if the user that react is not the one that sent the command
+        if replied_message.author.id != payload.user_id:
+            return
+
+        puppet_id = self.retrieve_puppet_id(origin_message.embeds)
+        # End Init Actions
+        ####
+
+        # We filter only on what we seek
+        if puppet_id in [constants.PUPPET_IDS["CARD_COGS_BUY"]]:
+            if puppet_id == constants.PUPPET_IDS["CARD_COGS_BUY"]:
+                try:
+                    character_id = self.retrieve_character_id(origin_message.embeds)
+                    owner = CharactersOwnership.get(discord_user_id=user_that_reacted.id,
+                                                    character_id=character_id)
+                    user_model, user_created = Economy.get_or_create(discord_user_id=user_that_reacted.id)
                     character_concerned = Character.get_by_id(owner.character_id)
                     user_model.amount += character_concerned.rarity
                     user_model.save()
                     owner.delete_instance()
-                    await payload.member.send(f"You have sold for {character_concerned.rarity} biteCoin the card "
-                                              f"\"{character_concerned.name}\".")
+                    await user_that_reacted.send(f"You have sold for {character_concerned.rarity} biteCoin the card"
+                                                 f" \"{character_concerned.name}\".")
                     return
-                else:
-                    await payload.member.send("You are not the owner of the card.")
+                except DoesNotExist:
                     channel = self.bot.get_channel(payload.channel_id)
                     msg = await channel.fetch_message(payload.message_id)
-                    await msg.remove_reaction(payload.emoji, payload.member)
-            except DoesNotExist:
-                channel = self.bot.get_channel(payload.channel_id)
-                msg = await channel.fetch_message(payload.message_id)
-                await msg.remove_reaction(payload.emoji, payload.member)
-                pass
+                    await msg.remove_reaction(payload.emoji, user_that_reacted)
 
 
 def distribute_random_character(rarities):
@@ -100,7 +124,7 @@ def generate_embed_character(character: Character):
     embed.set_thumbnail(url=character.image_link)
 
     # Author
-    embed.set_author(name=character.name, icon_url= rarities_img_url.format(rarities_colors_hex[character.rarity]),
+    embed.set_author(name=character.name, icon_url=rarities_img_url.format(rarities_colors_hex[character.rarity]),
                      url="")
 
     # Footer
@@ -116,13 +140,17 @@ def generate_embed_character(character: Character):
         affiliation += current_affiliation.name
     if affiliation:
         footer_text += f" | Affiliation(s): {affiliation}"
+    footer_text += f" | Character_id: {character.get_id()} | Puppet_id: {constants.PUPPET_IDS['CARD_COGS_BUY']}"
     embed.set_footer(text=footer_text, icon_url=rarities_img_url.format(rarities_colors_hex[character.rarity]))
 
     return embed
 
 
-async def display_character(ctx: Context, character: Character):
+async def display_character(ctx: Context, character: Character, delete_after: int = 0):
     character_embed = generate_embed_character(character)
-    msg = await ctx.channel.send(embed=character_embed)
+    if delete_after == 0:
+        msg = await ctx.message.reply(embed=character_embed, mention_author=False)
+    else:
+        msg = await ctx.message.reply(embed=character_embed, delete_after=delete_after, mention_author=False)
     await msg.add_reaction('💰')
     return msg

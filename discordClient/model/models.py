@@ -88,6 +88,16 @@ class CharactersOwnership(Model):
         database = db
 
 
+class Booster(Model):
+    name = CharField()
+    price = IntegerField()
+    rarities = CharField()
+    collection = CharField()
+
+    class Meta:
+        database = db
+
+
 db.create_tables([Character, Feature, Affiliation, CharacterAffiliation, CharacterOccurrence, Event, Rating, Economy,
                   CharactersOwnership])
 migrator = SqliteMigrator(dbContext.DbContext().sqliteConnection)
