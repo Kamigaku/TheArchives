@@ -25,9 +25,3 @@ class PuppetBot(commands.Bot):
         self.add_cog(EconomyCogs(self))
         self.add_cog(CardCogs(self))
         self.add_cog(MuseumCogs(self))
-
-    def get_emoji_str(self, name: str) -> str:
-        if emoji := self.get_emoji(name):
-            return str(emoji)
-        else:
-            return f":{name}:"
