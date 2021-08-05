@@ -150,6 +150,7 @@ class MuseumCogs(assignableCogs.AssignableCogs):
         rarity_description = "Select the rarities you want to display\n"
         label_index = 0
         for rarity_emoji in constants.RARITIES_EMOJI:
+            #rarity_description += f"\n{rarity_emoji} **{constants.RARITIES_LABELS[label_index]}**"
             rarity_description += f"\n{rarity_emoji} **{constants.RARITIES_LABELS[label_index]}**"
             label_index += 1
         rarity_description += f"\n{constants.ASTERISK_EMOJI} **Display all rarities**"
@@ -408,8 +409,10 @@ class MuseumCogs(assignableCogs.AssignableCogs):
 
             # Rarities => Affichage des personnages
             elif puppet_id == constants.PUPPET_IDS["MUSEUM_COGS_RARITIES"]:
-                if payload.emoji.name in constants.RARITIES_EMOJI:
-                    index_rarity = constants.RARITIES_EMOJI.index(payload.emoji.name)
+                #if payload.emoji.name in constants.RARITIES_EMOJI:
+                if str(payload.emoji) in constants.RARITIES_EMOJI:
+                    #index_rarity = constants.RARITIES_EMOJI.index(payload.emoji.name)
+                    index_rarity = constants.RARITIES_EMOJI.index(str(payload.emoji))
                     await self.display_characters(replied_message, category, payload.user_id, index_rarity)
                 elif payload.emoji.name == constants.ASTERISK_EMOJI:
                     await self.display_characters(replied_message, category, payload.user_id)
