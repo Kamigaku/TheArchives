@@ -12,10 +12,10 @@ ASTERISK_EMOJI = unicodedata.lookup("KEYCAP ASTERISK")
 #                   unicodedata.lookup('LARGE YELLOW SQUARE'), unicodedata.lookup('LARGE ORANGE SQUARE'),
 #                   unicodedata.lookup('LARGE PURPLE SQUARE')]
 
-RARITIES_EMOJI = ["\N{BLACK LARGE SQUARE}", "\N{WHITE LARGE SQUARE}",
-                  "\N{LARGE GREEN SQUARE}", "\N{LARGE BLUE SQUARE}",
-                  "\N{LARGE YELLOW SQUARE}", "\N{LARGE ORANGE SQUARE}",
-                  "\N{LARGE PURPLE SQUARE}"]
+RARITIES_EMOJI = ["\\N{BLACK LARGE SQUARE}", "\\N{WHITE LARGE SQUARE}",
+                  "\\N{LARGE GREEN SQUARE}", "\\N{LARGE BLUE SQUARE}",
+                  "\\N{LARGE YELLOW SQUARE}", "\\N{LARGE ORANGE SQUARE}",
+                  "\\N{LARGE PURPLE SQUARE}"]
 
 RARITIES_LABELS = ["E", "D", "C", "B", "A", "S", "SS"]
 
